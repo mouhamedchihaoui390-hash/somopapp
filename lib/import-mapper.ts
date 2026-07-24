@@ -23,8 +23,8 @@ export const FIELD_DEFS: FieldDef[] = [
   { key: 'subcategory', label: 'Subcategory', aliases: ['subcategory', 'sous categorie', 'sous-categorie', 'sub cat', 'sous rayon'], type: 'text' },
   { key: 'brand', label: 'Brand', aliases: ['brand', 'marque', 'fabricant', 'manufacturer', 'make', 'marque du produit', 'marque produit'], type: 'text' },
   { key: 'oem', label: 'OEM Number', aliases: ['oem', 'oem number', 'oem no', 'oem ref', 'numero oem', 'original equipment', 'oe number', 'oe'], type: 'text' },
-  { key: 'reference', label: 'Reference', aliases: ['reference', 'ref', 'reference number', 'ref no', 'part number', 'part no', 'numero piece', 'code piece', 'code'], type: 'text' },
-  { key: 'sku', label: 'Internal SKU', aliases: ['sku', 'internal ref', 'internal reference', 'code', 'code interne', 'reference interne'], type: 'text' },
+  { key: 'reference', label: 'Reference', aliases: ['reference', 'ref', 'reference number', 'ref no', 'part number', 'part no', 'numero piece', 'code piece'], type: 'text' },
+  { key: 'sku', label: 'Internal SKU', aliases: ['sku', 'code', 'internal ref', 'internal reference', 'code interne', 'reference interne', 'code piece', 'code produit'], type: 'text' },
   { key: 'barcode', label: 'Barcode', aliases: ['barcode', 'ean', 'ean13', 'upc', 'code barre', 'code a barres', 'gtin'], type: 'text' },
   { key: 'image_url', label: 'Image URL', aliases: ['image', 'image url', 'image link', 'photo', 'picture', 'img', 'lien image'], type: 'text' },
   { key: 'purchase_price', label: 'Purchase Price', aliases: ['purchase price', 'cost', 'cost price', 'prix achat', 'prix d achat', 'prix de revient', 'pa'], type: 'price' },
@@ -53,7 +53,9 @@ export const FIELD_DEFS: FieldDef[] = [
 ];
 
 function normalize(s: string): string {
-  return s.toLowerCase().trim().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').replace(/[^a-z0-9 ]/g, '').trim();
+  return s
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents (é -> e, ç -> c, etc.) instead of deleting the letter
+    .toLowerCase().trim().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').replace(/[^a-z0-9 ]/g, '').trim();
 }
 
 function similarity(a: string, b: string): number {

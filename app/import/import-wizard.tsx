@@ -190,7 +190,7 @@ export default function ImportWizardPage() {
           const productData: any = {
             name: mapped.name, description: mapped.description || null,
             category_id: categoryId, subcategory_id: subcategoryId, brand_id: brandId,
-            sku: mapped.sku || null, oem: mapped.oem || null, reference: mapped.reference || null,
+            sku: mapped.sku || null, oem: mapped.oem || null, reference: mapped.reference || mapped.sku || null,
             barcode: mapped.barcode || null, image_url: mapped.image_url || null,
             weight: mapped.weight || null, length: mapped.length || null, width: mapped.width || null, height: mapped.height || null,
             purchase_price: mapped.purchase_price || 0, selling_price: mapped.selling_price || 0,
