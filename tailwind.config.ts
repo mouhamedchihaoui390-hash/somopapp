@@ -9,6 +9,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['var(--font-display)', 'sans-serif'],
+        sans: ['var(--font-body)', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -19,7 +24,30 @@ const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      boxShadow: {
+        panel: '0 1px 2px 0 rgb(20 24 29 / 0.04), 0 1px 1px 0 rgb(20 24 29 / 0.03)',
+      },
       colors: {
+        'background-2': 'hsl(var(--background-2))',
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          bg: 'hsl(var(--success-bg))',
+        },
+        warning: {
+          DEFAULT: 'hsl(var(--warning))',
+          bg: 'hsl(var(--warning-bg))',
+        },
+        danger: {
+          DEFAULT: 'hsl(var(--destructive))',
+          bg: 'hsl(var(--danger-bg))',
+        },
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar))',
+          2: 'hsl(var(--sidebar-2))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          muted: 'hsl(var(--sidebar-muted))',
+          border: 'hsl(var(--sidebar-border))',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

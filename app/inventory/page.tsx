@@ -5,6 +5,7 @@ import { Warehouse, AlertTriangle, XCircle, TrendingUp, ArrowDownToLine, ArrowUp
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { BinTag, StockTag } from '@/components/ui/bin-tag';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getInventory, getStockMovements, getWarehouses, recordStockMovement } from '@/lib/services';
 import {
@@ -110,6 +111,7 @@ export default function InventoryPage() {
                   <TableHead>Produit</TableHead>
                   <TableHead>OEM</TableHead>
                   <TableHead>Entrepôt</TableHead>
+                  <TableHead>Statut</TableHead>
                   <TableHead className="text-right">Qté</TableHead>
                   <TableHead className="text-right">Réservé</TableHead>
                   <TableHead className="text-right">Entrant</TableHead>
@@ -121,10 +123,13 @@ export default function InventoryPage() {
                 {inventory.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell className="font-medium">{item.product?.name || '—'}</TableCell>
-                    <TableCell className="text-xs">{item.product?.oem || '—'}</TableCell>
+                    <TableCell>{item.product?.oem ? <BinTag>{item.product.oem}</BinTag> : '—'}</TableCell>
                     <TableCell>{item.warehouse?.name || '—'}</TableCell>
+                    <TableCell>
+                      <StockTag status={item.quantity === 0 ? 'out_of_stock' : item.quantity < 5 ? 'low_stock' : 'in_stock'} />
+                    </TableCell>
                     <TableCell className="text-right">
-                      <span className={item.quantity === 0 ? 'text-red-500 font-bold' : item.quantity < 5 ? 'text-amber-500 font-bold' : 'font-medium'}>
+                      <span className="font-mono tabular font-medium">
                         {item.quantity}
                       </span>
                     </TableCell>
@@ -166,17 +171,17 @@ export default function InventoryPage() {
                     <TableCell className="font-medium">{m.product?.name || '—'}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className={
-                        m.movement_type === 'in' ? 'text-green-600' :
-                        m.movement_type === 'out' ? 'text-red-600' : ''
+                        m.movement_type === 'in' ? 'text-success border-success/30' :
+                        m.movement_type === 'out' ? 'text-danger border-danger/30' : ''
                       }>
                         {m.movement_type === 'in' && <ArrowDownToLine className="h-3 w-3 mr-1 inline" />}
                         {m.movement_type === 'out' && <ArrowUpFromLine className="h-3 w-3 mr-1 inline" />}
                         {m.movement_type}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right font-medium">{m.quantity}</TableCell>
+                    <TableCell className="text-right font-mono tabular font-medium">{m.quantity}</TableCell>
                     <TableCell>{m.warehouse?.name || '—'}</TableCell>
-                    <TableCell className="text-xs">{m.reference || '—'}</TableCell>
+                    <TableCell>{m.reference ? <BinTag>{m.reference}</BinTag> : '—'}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

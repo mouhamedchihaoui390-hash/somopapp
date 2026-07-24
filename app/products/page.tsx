@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { BinTag } from '@/components/ui/bin-tag';
 import { smartSearchProducts, type SearchFilters } from '@/lib/search';
 import { AdvancedFilters } from '@/components/advanced-filters';
 import { VehicleSelector, type VehicleSelection } from '@/components/vehicle-selector';
@@ -91,8 +92,9 @@ function ProductsPageContent() {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Produits</h1>
-          <p className="text-sm text-muted-foreground">{count.toLocaleString('fr-FR')} produits dans le catalogue</p>
+          <p className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">Catalogue</p>
+          <h1 className="font-display text-2xl font-semibold tracking-tight">Produits</h1>
+          <p className="text-sm text-muted-foreground font-mono">{count.toLocaleString('fr-FR')} produits</p>
         </div>
         <Link href="/import">
           <Button>
@@ -149,10 +151,10 @@ function ProductsPageContent() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((p) => (
               <Link key={p.id} href={`/products/${p.id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer h-full group">
+                <Card className="hover:border-primary/40 transition-colors cursor-pointer h-full group">
                   <CardContent className="p-4">
                     <div className="flex gap-3">
-                      <div className="h-16 w-16 rounded-lg bg-muted flex items-center justify-center shrink-0 overflow-hidden group-hover:scale-105 transition-transform">
+                      <div className="h-16 w-16 rounded-sm bg-background-2 border border-border flex items-center justify-center shrink-0 overflow-hidden">
                         {p.image_url ? (
                           <img src={p.image_url} alt={p.name} className="h-full w-full object-cover" />
                         ) : (
@@ -165,11 +167,11 @@ function ProductsPageContent() {
                           {p.brand && <Badge variant="secondary" className="text-xs">{p.brand.name}</Badge>}
                           {p.category && <Badge variant="outline" className="text-xs">{p.category.name}</Badge>}
                         </div>
-                        <div className="mt-2 space-y-0.5">
-                          {p.oem && <p className="text-xs text-muted-foreground">OEM: {p.oem}</p>}
-                          {p.reference && <p className="text-xs text-muted-foreground">Réf: {p.reference}</p>}
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {p.oem && <BinTag>{p.oem}</BinTag>}
+                          {p.reference && <BinTag>{p.reference}</BinTag>}
                         </div>
-                        <p className="text-sm font-bold mt-1">{Number(p.selling_price || 0).toFixed(3)} TND</p>
+                        <p className="font-mono text-sm font-semibold mt-2 tabular">{Number(p.selling_price || 0).toFixed(3)} TND</p>
                       </div>
                     </div>
                   </CardContent>

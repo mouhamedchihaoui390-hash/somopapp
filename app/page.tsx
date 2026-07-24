@@ -7,15 +7,15 @@ import {
   ClipboardList, DollarSign, Activity, TrendingUp,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { BinTag } from '@/components/ui/bin-tag';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line, Legend,
 } from 'recharts';
 import { getDashboardStats, getRecentActivity, getSalesChartData, getInventoryByCategory } from '@/lib/services';
 
-const PIE_COLORS = ['hsl(221 83% 53%)', 'hsl(160 84% 39%)', 'hsl(43 74% 66%)', 'hsl(340 75% 55%)', 'hsl(197 37% 50%)'];
+const PIE_COLORS = ['hsl(21 90% 48%)', 'hsl(146 66% 33%)', 'hsl(214 10% 40%)', 'hsl(38 90% 38%)', 'hsl(213 18% 10%)'];
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
@@ -44,9 +44,9 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <div className="h-8 w-48 bg-muted rounded animate-pulse" />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-28 bg-muted rounded-lg animate-pulse" />
+            <div key={i} className="h-24 bg-muted rounded-md animate-pulse" />
           ))}
         </div>
       </div>
@@ -54,22 +54,22 @@ export default function DashboardPage() {
   }
 
   const kpis = [
-    { label: 'Produits', value: stats.productCount, icon: Package, color: 'text-blue-500' },
-    { label: 'Valeur du stock', value: `${stats.inventoryValue.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} TND`, icon: DollarSign, color: 'text-green-500' },
-    { label: 'Stock faible', value: stats.lowStockCount, icon: AlertTriangle, color: 'text-amber-500' },
-    { label: 'Rupture de stock', value: stats.outOfStockCount, icon: XCircle, color: 'text-red-500' },
-    { label: 'Clients', value: stats.customerCount, icon: Users, color: 'text-purple-500' },
-    { label: 'Fournisseurs', value: stats.supplierCount, icon: Truck, color: 'text-cyan-500' },
-    { label: 'Demandes VIN', value: stats.vinPendingCount, icon: Car, color: 'text-orange-500' },
-    { label: 'Commandes de vente', value: stats.orderCount, icon: ClipboardList, color: 'text-pink-500' },
+    { label: 'Produits', value: stats.productCount, icon: Package, edge: 'bg-foreground' },
+    { label: 'Valeur du stock', value: `${stats.inventoryValue.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} TND`, icon: DollarSign, edge: 'bg-success' },
+    { label: 'Stock faible', value: stats.lowStockCount, icon: AlertTriangle, edge: 'bg-warning' },
+    { label: 'Rupture de stock', value: stats.outOfStockCount, icon: XCircle, edge: 'bg-danger' },
+    { label: 'Clients', value: stats.customerCount, icon: Users, edge: 'bg-foreground' },
+    { label: 'Fournisseurs', value: stats.supplierCount, icon: Truck, edge: 'bg-foreground' },
+    { label: 'Demandes VIN', value: stats.vinPendingCount, icon: Car, edge: 'bg-primary' },
+    { label: 'Commandes de vente', value: stats.orderCount, icon: ClipboardList, edge: 'bg-primary' },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Tableau de bord</h1>
-          <p className="text-sm text-muted-foreground">Vue d'ensemble de votre activité de pièces automobiles</p>
+          <p className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-1">Aperçu · Temps réel</p>
+          <h1 className="font-display text-2xl font-semibold tracking-tight">Tableau de bord</h1>
         </div>
         <Link href="/import">
           <Button>
@@ -79,46 +79,44 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* KPI readout plates */}
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         {kpis.map((kpi) => {
           const Icon = kpi.icon;
           return (
-            <Card key={kpi.label}>
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{kpi.label}</p>
-                    <p className="text-2xl font-bold mt-1">{kpi.value}</p>
-                  </div>
-                  <div className={`p-2 rounded-lg bg-muted ${kpi.color}`}>
-                    <Icon className="h-5 w-5" />
-                  </div>
+            <div key={kpi.label} className="relative bg-card border border-border shadow-panel rounded-md overflow-hidden">
+              <span className={`absolute left-0 top-0 h-full w-1 ${kpi.edge}`} />
+              <div className="pl-4 pr-4 py-4 flex items-start justify-between">
+                <div className="min-w-0">
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground truncate">{kpi.label}</p>
+                  <p className="font-display text-[26px] font-semibold tabular leading-tight mt-1">{kpi.value}</p>
                 </div>
-              </CardContent>
-            </Card>
+                <Icon className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+              </div>
+            </div>
           );
         })}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <TrendingUp className="h-4 w-4 text-primary" />
               Ventes (30 derniers jours)
             </CardTitle>
           </CardHeader>
           <CardContent>
             {salesData.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-8 text-center">Aucune donnée de vente</p>
+              <p className="text-sm text-muted-foreground py-8 text-center font-mono">— Aucune donnée —</p>
             ) : (
-              <ResponsiveContainer width="100%" height={280}>
+              <ResponsiveContainer width="100%" height={260}>
                 <LineChart data={salesData}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis dataKey="date" className="text-xs" />
-                  <YAxis className="text-xs" />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="total" stroke="hsl(221 83% 53%)" strokeWidth={2} name="Revenu" />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" vertical={false} />
+                  <XAxis dataKey="date" className="text-xs" tickLine={false} axisLine={false} />
+                  <YAxis className="text-xs" tickLine={false} axisLine={false} />
+                  <Tooltip contentStyle={{ borderRadius: 6, border: '1px solid hsl(var(--border))', fontSize: 12 }} />
+                  <Line type="monotone" dataKey="total" stroke="hsl(21 90% 48%)" strokeWidth={2} dot={false} name="Revenu" />
                 </LineChart>
               </ResponsiveContainer>
             )}
@@ -126,22 +124,22 @@ export default function DashboardPage() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Inventaire par catégorie</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Inventaire par catégorie</CardTitle>
           </CardHeader>
           <CardContent>
             {catData.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-8 text-center">Aucune donnée d'inventaire</p>
+              <p className="text-sm text-muted-foreground py-8 text-center font-mono">— Aucune donnée —</p>
             ) : (
-              <ResponsiveContainer width="100%" height={280}>
+              <ResponsiveContainer width="100%" height={260}>
                 <PieChart>
-                  <Pie data={catData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
+                  <Pie data={catData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={85} label>
                     {catData.map((_, i) => (
                       <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
-                  <Legend />
+                  <Tooltip contentStyle={{ borderRadius: 6, border: '1px solid hsl(var(--border))', fontSize: 12 }} />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
             )}
@@ -150,22 +148,24 @@ export default function DashboardPage() {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Activité récente</CardTitle>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Activité récente</CardTitle>
         </CardHeader>
         <CardContent>
           {activity.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-4 text-center">Aucune activité récente</p>
+            <p className="text-sm text-muted-foreground py-4 text-center font-mono">— Aucune activité —</p>
           ) : (
-            <div className="space-y-3">
+            <div className="divide-y divide-border">
               {activity.map((log) => (
-                <div key={log.id} className="flex items-center gap-3 text-sm">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
+                <div key={log.id} className="flex items-center gap-3 text-sm py-2.5 first:pt-0 last:pb-0">
+                  <span className="h-1.5 w-1.5 shrink-0 bg-primary" />
                   <span className="font-medium">{log.action}</span>
-                  <span className="text-muted-foreground">{log.detail}</span>
-                  <Badge variant="outline" className="ml-auto text-xs">
+                  {log.detail && (log.detail.length <= 24
+                    ? <BinTag className="shrink-0">{log.detail}</BinTag>
+                    : <span className="text-muted-foreground truncate">{log.detail}</span>)}
+                  <span className="ml-auto text-xs text-muted-foreground font-mono shrink-0">
                     {new Date(log.created_at).toLocaleDateString('fr-FR')}
-                  </Badge>
+                  </span>
                 </div>
               ))}
             </div>

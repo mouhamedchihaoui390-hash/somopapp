@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/lib/supabase';
+import { BinTag } from '@/components/ui/bin-tag';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Sidebar } from '@/components/sidebar';
 import { instantSearch, getRecentSearches, addRecentSearch, clearRecentSearches, type SearchResult } from '@/lib/search';
@@ -118,7 +119,7 @@ export function Topbar() {
   const nextIndex = () => { itemIndex++; return itemIndex; };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b bg-card px-4 md:px-6">
+    <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-border bg-card px-4 md:px-6 shadow-panel">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="md:hidden">
@@ -264,15 +265,14 @@ export function Topbar() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{p.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {p.oem && `OEM: ${p.oem} `}
-                          {p.reference && `Réf: ${p.reference}`}
-                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          {(p.oem || p.reference) && <BinTag>{p.oem || p.reference}</BinTag>}
+                        </div>
                       </div>
                       {p.selling_price && (
-                        <Badge variant="outline" className="text-xs shrink-0">
+                        <span className="font-mono text-xs font-medium shrink-0 tabular">
                           {Number(p.selling_price).toFixed(3)} TND
-                        </Badge>
+                        </span>
                       )}
                     </Link>
                   );
